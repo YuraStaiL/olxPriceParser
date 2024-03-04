@@ -1,4 +1,4 @@
-version: '24.0.5'    #check if there is a new docker compose version
+version: '24.0.5'
 services:
   web:
     container_name: php
