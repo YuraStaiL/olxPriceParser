@@ -1,0 +1,40 @@
+version: '24.0.5'    #check if there is a new docker compose version
+services:
+  web:
+    container_name: php
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/var/www/html
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql-db
+
+  mysql-db:
+    container_name: mysql
+    image: mysql:8.0.36
+    environment:
+      MYSQL_ROOT_PASSWORD: 1414
+      MYSQL_DATABASE: olx
+      MYSQL_USER: db_user
+      MYSQL_PASSWORD: 1414
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db_dumps:/docker-entrypoint-initdb.d
+#      - /var/lib/mysql:/var/lib/mysql
+
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    links:
+      - mysql-db
+    ports:
+      - "8000:80"
+    environment:
+      PMA_HOST: mysql-db
+      MYSQL_ROOT_PASSWORD: 1414
+    depends_on:
+      - mysql-db
